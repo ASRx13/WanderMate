@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WanderMate — Simple Travel Buddy, Itinerary & Expense Tracker</title>
+  <meta name="description" content="A simple, elegant travel companion app to manage itineraries, track next destinations to visit, and log trip expenses effortlessly.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+
+  <div id="app" class="app-container">
+    <!-- Header / Trip Banner -->
+    <header class="app-header">
+      <div class="header-content">
+        <div class="brand-row">
+          <div class="brand-logo">
+            <span class="logo-icon">✈️</span>
+            <div>
+              <h1 class="app-title">WanderMate</h1>
+              <p class="app-subtitle">Your Smart Travel Buddy</p>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button id="themeToggleBtn" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme">
+              <span id="themeIcon">🌙</span>
+            </button>
+            <button id="tripSettingsBtn" class="btn btn-secondary btn-sm" aria-label="Trip Settings">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span>Edit Trip</span>
+            </button>
+            <button id="resetDataBtn" class="btn btn-ghost btn-sm" title="Reset to Sample Trip">Sample Data</button>
+          </div>
+        </div>
+
+        <!-- Trip Overview Card -->
+        <div class="trip-hero-card">
+          <div class="trip-meta-left">
+            <div class="badge-pill" id="tripDatesBadge">Oct 12 – Oct 18, 2026</div>
+            <h2 id="tripTitleDisplay" class="trip-name">Kyoto & Tokyo Autumn Journey 🍁</h2>
+            <p id="tripDestinationDisplay" class="trip-destination">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Japan (Tokyo & Kyoto)</span>
+            </p>
+          </div>
+
+          <div class="trip-quick-stats">
+            <div class="stat-box">
+              <span class="stat-label">Stops Visited</span>
+              <span class="stat-value" id="statsStopsProgress">3 / 8</span>
+              <div class="mini-progress-bar">
+                <div class="mini-progress-fill" id="stopsProgressFill" style="width: 37.5%;"></div>
+              </div>
+            </div>
+
+            <div class="stat-box">
+              <span class="stat-label">Budget Spent</span>
+              <span class="stat-value" id="statsBudgetSpent">$1,240</span>
+              <div class="mini-progress-bar">
+                <div class="mini-progress-fill budget-fill" id="budgetProgressFill" style="width: 62%;"></div>
+              </div>
+              <span class="stat-sub" id="statsBudgetLimit">of $2,000 budget</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next Point Highlight Card -->
+        <section class="next-highlight-section" id="nextHighlightSection">
+          <div class="next-highlight-card">
+            <div class="next-badge">
+              <span class="pulsing-dot"></span> NEXT DESTINATION TO COVER
+            </div>
+            <div class="next-card-content">
+              <div class="next-card-info">
+                <h3 id="nextPointTitle" class="next-title">Fushimi Inari Taisha Shrine</h3>
+                <div class="next-meta-tags">
+                  <span id="nextPointTime" class="tag-meta time-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Tomorrow, 07:30 AM
+                  </span>
+                  <span id="nextPointLocation" class="tag-meta location-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Kyoto, Fushimi Ward
+                  </span>
+                  <span id="nextPointDay" class="tag-meta day-tag">Day 3</span>
+                </div>
+                <p id="nextPointNotes" class="next-notes">Arrive early to beat morning crowds at the thousands of vermilion Torii gates. Wear walking shoes!</p>
+              </div>
+              <div class="next-card-actions">
+                <a id="nextMapLink" href="https://maps.google.com/?q=Fushimi+Inari+Taisha" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+                  <span>Open Maps</span>
+                </a>
+                <button id="markNextDoneBtn" class="btn btn-primary btn-sm">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span>Mark as Visited</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tab-bar" aria-label="Main Navigation">
+      <button class="nav-tab active" data-tab="itinerary" id="tabItinerary">
+        <span class="tab-icon">🗓️</span>
+        <span class="tab-text">Itinerary Schedule</span>
+        <span class="tab-badge" id="itineraryCountBadge">0</span>
+      </button>
+      <button class="nav-tab" data-tab="points" id="tabPoints">
+        <span class="tab-icon">📍</span>
+        <span class="tab-text">Next Points to Cover</span>
+        <span class="tab-badge" id="pointsCountBadge">0</span>
+      </button>
+      <button class="nav-tab" data-tab="expenses" id="tabExpenses">
+        <span class="tab-icon">💳</span>
+        <span class="tab-text">Expense Logger</span>
+        <span class="tab-badge" id="expensesCountBadge">0</span>
+      </button>
+      <button class="nav-tab" data-tab="packing" id="tabPacking">
+        <span class="tab-icon">🎒</span>
+        <span class="tab-text">Essentials</span>
+      </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- TAB 1: ITINERARY TIMELINE -->
+      <section id="panelItinerary" class="tab-panel active">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Trip Itinerary & Daily Schedule</h2>
+            <p class="panel-desc">Plan your days chronologically, track timings, and tick off stops as you go.</p>
+          </div>
+          <div class="panel-controls">
+            <select id="itineraryDayFilter" class="form-select filter-select" aria-label="Filter by Day">
+              <option value="all">All Days</option>
+            </select>
+            <button id="addItineraryBtn" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Add Itinerary Stop</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="itineraryListContainer" class="itinerary-timeline-container">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- TAB 2: NEXT POINTS TO COVER / BUCKET LIST -->
+      <section id="panelPoints" class="tab-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Next Points to Cover</h2>
+            <p class="panel-desc">Must-visit spots, scenic viewpoints, food stops, and spontaneous ideas.</p>
+          </div>
+          <div class="panel-controls">
+            <div class="filter-pill-group" id="pointCategoryFilters">
+              <button class="filter-pill active" data-point-filter="all">All</button>
+              <button class="filter-pill" data-point-filter="pending">Pending</button>
+              <button class="filter-pill" data-point-filter="completed">Completed</button>
+              <button class="filter-pill" data-point-filter="Sightseeing">Sightseeing</button>
+              <button class="filter-pill" data-point-filter="Food">Food</button>
+              <button class="filter-pill" data-point-filter="Activity">Activity</button>
+            </div>
+            <button id="addPointBtn" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Add Point</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="pointsGridContainer" class="points-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+
+      <!-- TAB 3: EXPENSE LOGGER -->
+      <section id="panelExpenses" class="tab-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Trip Expense Logger</h2>
+            <p class="panel-desc">Keep your spending in check with real-time budget balances and category breakdowns.</p>
+          </div>
+          <div class="panel-controls">
+            <button id="addExpenseBtn" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Log Expense</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Expense Analytics Overview -->
+        <div class="expense-metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon money-spent-icon">💸</div>
+            <div class="metric-details">
+              <span class="metric-label">Total Spent</span>
+              <span class="metric-number" id="expMetricTotalSpent">$0.00</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon money-remaining-icon">💰</div>
+            <div class="metric-details">
+              <span class="metric-label">Remaining Budget</span>
+              <span class="metric-number" id="expMetricRemaining">$0.00</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon money-daily-icon">📊</div>
+            <div class="metric-details">
+              <span class="metric-label">Avg. Daily Spend</span>
+              <span class="metric-number" id="expMetricDailyAvg">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Spending Progress Bars -->
+        <div class="expense-card category-breakdown-card">
+          <div class="card-section-title">
+            <h3>Spending by Category</h3>
+            <span class="currency-tag" id="activeCurrencyDisplay">Currency: USD ($)</span>
+          </div>
+          <div class="category-bars-grid" id="categoryBarsContainer">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="expense-card transactions-card">
+          <div class="card-section-title transactions-header">
+            <h3>Logged Expenses</h3>
+            <div class="expense-filter-row">
+              <select id="expenseCategoryFilter" class="form-select filter-select" aria-label="Filter expenses by category">
+                <option value="all">All Categories</option>
+                <option value="Food">🍽️ Food & Dining</option>
+                <option value="Stay">🏨 Accommodation</option>
+                <option value="Transport">🚆 Transport</option>
+                <option value="Activities">🎟️ Tickets & Tours</option>
+                <option value="Shopping">🛍️ Shopping</option>
+                <option value="Misc">📦 Other / Misc</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="expenses-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Date</th>
+                  <th>Payment Method</th>
+                  <th class="text-right">Amount</th>
+                  <th class="text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="expensesTableBody">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: ESSENTIALS & PACKING -->
+      <section id="panelPacking" class="tab-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Trip Essentials & Packing Checklist</h2>
+            <p class="panel-desc">Quickly check off travel documents, medications, electronics, and accessories.</p>
+          </div>
+          <div class="panel-controls">
+            <button id="addPackingItemBtn" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Add Checklist Item</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="packing-grid" id="packingListContainer">
+          <!-- Populated by JavaScript -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <p>WanderMate — Built for seamless, stress-free travels. Data is stored safely in your browser.</p>
+        <button id="quickExportBtn" class="btn-link">Export Trip Summary (JSON)</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODAL: ADD / EDIT ITINERARY STOP -->
+  <div id="itineraryModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="itineraryModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="itineraryModalTitle" class="modal-title">Add Itinerary Stop</h3>
+        <button class="modal-close" data-close-modal="itineraryModal" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="itineraryForm" class="modal-form">
+        <input type="hidden" id="itinId">
+        <div class="form-group">
+          <label for="itinTitle" class="form-label">Activity / Place Name *</label>
+          <input type="text" id="itinTitle" class="form-input" placeholder="e.g., Arashiyama Bamboo Grove" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="itinDay" class="form-label">Trip Day *</label>
+            <input type="number" id="itinDay" class="form-input" min="1" max="60" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="itinTime" class="form-label">Time</label>
+            <input type="time" id="itinTime" class="form-input" value="09:00">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="itinLocation" class="form-label">Location / Address</label>
+          <input type="text" id="itinLocation" class="form-input" placeholder="e.g., Kyoto, Ukyo Ward">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="itinCategory" class="form-label">Category</label>
+            <select id="itinCategory" class="form-select">
+              <option value="Sightseeing">🏛️ Sightseeing</option>
+              <option value="Food">🍜 Food & Dining</option>
+              <option value="Transport">🚅 Transit / Travel</option>
+              <option value="Activity">🎟️ Activity / Tour</option>
+              <option value="Relaxation">☕ Leisure / Hotel</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="itinEstimatedCost" class="form-label">Est. Cost (Optional)</label>
+            <input type="number" id="itinEstimatedCost" class="form-input" placeholder="0" min="0" step="any">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="itinNotes" class="form-label">Notes & Tips</label>
+          <textarea id="itinNotes" class="form-textarea" rows="2" placeholder="e.g., Book tickets in advance, wear comfortable shoes"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" data-close-modal="itineraryModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Stop</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT NEXT POINT -->
+  <div id="pointModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="pointModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="pointModalTitle" class="modal-title">Add Point to Cover</h3>
+        <button class="modal-close" data-close-modal="pointModal" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="pointForm" class="modal-form">
+        <input type="hidden" id="pointId">
+        <div class="form-group">
+          <label for="pointTitle" class="form-label">Place or Attraction *</label>
+          <input type="text" id="pointTitle" class="form-input" placeholder="e.g., Shibuya Sky Observatory" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pointCategory" class="form-label">Type</label>
+            <select id="pointCategory" class="form-select">
+              <option value="Sightseeing">📸 Sightseeing</option>
+              <option value="Food">🍜 Food & Café</option>
+              <option value="Activity">🎢 Adventure / Experience</option>
+              <option value="Shopping">🛍️ Shopping</option>
+              <option value="Nature">🌲 Nature & Parks</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pointPriority" class="form-label">Priority</label>
+            <select id="pointPriority" class="form-select">
+              <option value="High">🔥 Must Visit</option>
+              <option value="Medium" selected>⭐ Recommended</option>
+              <option value="Low">💡 If Time Permits</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="pointLocation" class="form-label">City or Area</label>
+          <input type="text" id="pointLocation" class="form-input" placeholder="e.g., Shibuya, Tokyo">
+        </div>
+        <div class="form-group">
+          <label for="pointNotes" class="form-label">Highlights / Tips</label>
+          <textarea id="pointNotes" class="form-textarea" rows="2" placeholder="e.g., Sunset reservation recommended 3 weeks early"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" data-close-modal="pointModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Point</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: LOG EXPENSE -->
+  <div id="expenseModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="expenseModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="expenseModalTitle" class="modal-title">Log New Expense</h3>
+        <button class="modal-close" data-close-modal="expenseModal" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="expenseForm" class="modal-form">
+        <input type="hidden" id="expenseId">
+        <div class="form-group">
+          <label for="expenseTitle" class="form-label">Expense Description *</label>
+          <input type="text" id="expenseTitle" class="form-input" placeholder="e.g., Shinkansen Bullet Train Ticket" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expenseAmount" class="form-label">Amount *</label>
+            <input type="number" id="expenseAmount" class="form-input" placeholder="0.00" min="0.01" step="any" required>
+          </div>
+          <div class="form-group">
+            <label for="expenseCategory" class="form-label">Category *</label>
+            <select id="expenseCategory" class="form-select" required>
+              <option value="Food">🍽️ Food & Dining</option>
+              <option value="Stay">🏨 Accommodation</option>
+              <option value="Transport" selected>🚆 Transport</option>
+              <option value="Activities">🎟️ Tickets & Tours</option>
+              <option value="Shopping">🛍️ Shopping</option>
+              <option value="Misc">📦 Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expenseDate" class="form-label">Date *</label>
+            <input type="date" id="expenseDate" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="expensePayment" class="form-label">Payment Mode</label>
+            <select id="expensePayment" class="form-select">
+              <option value="Card">💳 Credit / Debit Card</option>
+              <option value="Cash">💵 Cash</option>
+              <option value="UPI / App">📱 Mobile Pay / UPI</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="expenseNotes" class="form-label">Notes (Optional)</label>
+          <input type="text" id="expenseNotes" class="form-input" placeholder="e.g., Tokyo to Kyoto reserved seat">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" data-close-modal="expenseModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT TRIP SETTINGS -->
+  <div id="settingsModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="settingsModalTitle" class="modal-title">Trip Settings</h3>
+        <button class="modal-close" data-close-modal="settingsModal" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="settingsForm" class="modal-form">
+        <div class="form-group">
+          <label for="tripTitleInput" class="form-label">Trip Name *</label>
+          <input type="text" id="tripTitleInput" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="tripDestInput" class="form-label">Destination *</label>
+          <input type="text" id="tripDestInput" class="form-input" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tripStartDate" class="form-label">Start Date</label>
+            <input type="date" id="tripStartDate" class="form-input">
+          </div>
+          <div class="form-group">
+            <label for="tripEndDate" class="form-label">End Date</label>
+            <input type="date" id="tripEndDate" class="form-input">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tripBudgetInput" class="form-label">Total Budget *</label>
+            <input type="number" id="tripBudgetInput" class="form-input" min="0" step="any" required>
+          </div>
+          <div class="form-group">
+            <label for="tripCurrencySelect" class="form-label">Currency</label>
+            <select id="tripCurrencySelect" class="form-select">
+              <option value="$">USD ($)</option>
+              <option value="€">EUR (€)</option>
+              <option value="£">GBP (£)</option>
+              <option value="¥">JPY / CNY (¥)</option>
+              <option value="₹">INR (₹)</option>
+              <option value="A$">AUD (A$)</option>
+              <option value="C$">CAD (C$)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" data-close-modal="settingsModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
